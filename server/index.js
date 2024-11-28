@@ -1,11 +1,12 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
-import dotenv from 'dotenv'
 import cors from 'cors'
-import connectDb from './config/connectDb.js'
-import notesRouter from './router/noteRouter.js'
+import dotenv from 'dotenv'
+import connectDb from './config/connectDB.js'
+import noteRoutes from './route/note.js'
+import userRoutes from './route/user.js'
 
-dotenv.config()
+dotenv.config() 
 
 const app = express()
 const port = process.env.PORT || 4000
@@ -13,7 +14,8 @@ const port = process.env.PORT || 4000
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors())
-app.use("/api/notes", notesRouter)
+app.use("/api/notes", noteRoutes)
+app.use("/api/users", userRoutes)
 
 const startServer = async () => {
     await connectDb()
