@@ -1,27 +1,29 @@
-import express from 'express'
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import connectDb from './config/connectDB.js'
-import noteRoutes from './route/note.js'
-import userRoutes from './route/user.js'
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import connectDB from "./config/db.js";
+import noteRoutes from './routes/noteRoute.js'
 
-dotenv.config() 
+dotenv.config();
 
-const app = express()
-const port = process.env.PORT || 4000
+const app = express();
+const port = process.env.PORT || 3000;
 
-app.use(express.json())
-app.use(cookieParser())
-app.use(cors())
+app.use(express.json());
+app.use(cookieParser());
+app.options("*", cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
 app.use("/api/notes", noteRoutes)
-app.use("/api/users", userRoutes)
 
 const startServer = async () => {
-    await connectDb()
-    app.listen(port, () => {
-        console.log("Server started")
-    })
-}
+  await connectDB();
+  app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+  });
+};
 
-startServer()
+startServer();
